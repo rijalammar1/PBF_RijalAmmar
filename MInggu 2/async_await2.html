@@ -1,0 +1,37 @@
+<!-- Rijal Ammar Irsyadul Ibad/2041720184/TI3B/15 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Uncover</title>
+</head>
+<body>
+    <h1>Belajar JavaScript</h1>
+    <script>
+        const getUser = () => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    //resolve("Rudi");
+                    reject("Something wrong...");
+                }, 2000)
+            })
+        }
+
+        const tryGetGame = async () => {
+            try{
+                let userName = await getUser();
+                console.log(userName);
+            }
+            catch (error){
+                console.log(error);
+            }
+        };
+
+        console.log("Start...");
+        tryGetGame();
+        console.log("Finish");
+    </script>
+</body>
+</html>
