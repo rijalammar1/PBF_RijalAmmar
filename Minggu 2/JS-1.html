@@ -1,0 +1,33 @@
+<!-- Rijal Ammar Irsyadul Ibad/2041720184/TI3B/15 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Undercover</title>
+</head>
+<body>
+    <h1>Belajar JavaScript (ES6)</h1>
+    <script>
+        let mahasiswa = {
+            nama: "Rijal Ammar",
+            umur: 21,
+            jurusan: "Teknik Informatika",
+            getInfo() {
+                return `${this.nama} (${this.umur} tahun) dari jurusan ${this.jurusan}`;
+            }
+        }
+
+        console.log(mahasiswa);
+        // {nama: "Rijal Ammar", umur: 21, jurusan: "Teknik Informatika", getinfo: f}
+
+        mahasiswa.umur = 20;
+        mahasiswa.tempatLahir = "Malang";
+
+        console.log(mahasiswa);
+        // {nama: "Rijal Ammar", umur: 21, jurusan: "Teknik Informatika", tempatLahir: "Malang",  getinfo: f}
+
+    </script>
+</body>
+</html>
