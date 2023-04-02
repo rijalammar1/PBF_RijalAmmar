@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.js"></script>
+    <script type="text/babel">
+        
+        class Mahasiswas extends React.Component {
+            render () {
+                return (
+                    <figure key={this.props.id}>
+                        <img src={this.props.pasFoto} alt={this.props.nama} />
+                        <figcaption>{this.props.nama} ({this.props.type})</figcaption>    
+                    </figure>
+                )
+            }
+        }
+        
+        class DaftarMahasiswa extends React.Component {
+            render () {
+                const mahasiswa = [
+                    {
+                        id: 1,
+                        nama: "BMTH",
+                        type: "MetalCore",
+                        pasFoto: "../img/bmth.jpg"
+                    },
+                    {
+                        id: 2,
+                        nama: "BMTH",
+                        type: "MetalCore",
+                        pasFoto: "../img/bmth.jpg"
+                    },
+                    {
+                        id: 3,
+                        nama: "BMTH",
+                        type: "MetalCore",
+                        pasFoto: "../img/bmth.jpg"
+                    }
+                ];
+                return (
+                    <React.Fragment>
+                        <h1><center>Bring Me The Horizon</center></h1>
+                        <hr />
+                        <section style={{display: "flex", textAlign: "center"}}>
+                            {
+                                mahasiswa.map((mhs, key) => 
+                                    <Mahasiswas id = {mhs.id} nama = {mhs.nama} type = {mhs.type} pasFoto = {mhs.pasFoto}/>
+                                )
+                            }
+                        </section>
+                    </React.Fragment>
+                )
+            }
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<DaftarMahasiswa />);
+    </script>
+</body>
+
+</html>
