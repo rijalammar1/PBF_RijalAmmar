@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React StateHook</title>
+    <style>
+        #root {
+            display: flex;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            margin-top: 2rem;
+            padding: 2rem 3rem;
+            box-shadow: 8px 8px 0px black;
+            border: 2px solid black;
+        }
+
+        .container div {
+            padding-bottom: 0.6rem;
+        }
+
+        div label:first-child {
+            display: inline-block;
+            width: 180px;
+        }
+
+        label {
+            vertical-align: top;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 230px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: white;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-weight: bold;
+            border: 1px solid grey;
+            box-shadow: 2px 2px 2px black;
+            margin: 10px 0px;
+        }
+
+        button:hover {
+            box-shadow: 1px 1px 1px black;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div id = root></div>
+
+    <script src="js/react.development.js"></script>
+    <script src="js/react-dom.development.js"></script>
+    <script src="js/babel.js"></script>
+    <script type="text/babel">
+
+        class MyApp extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = {
+                    username: "",
+                    email: "",
+                    errors: {
+                        username: "",
+                        email: ""
+                    },
+                }
+            }
+
+            handleInputChange = (event) => {
+                this.setState({ [event.target.name]: event.target.value})
+            }
+
+            handleFormSubmit = (event) => {
+                event.preventDefault();
+
+                const username = this.state.username;
+                const email = this.state.email;
+                let errors = this.state.errors;
+                
+                if (!username) {
+                    errors.username = "Username Tidak Boleh Kososng"
+                } else if (username.length < 6) {
+                    errors.username = "Username minimal 6 karakter"
+                } else {
+                    errors.username = ""
+                }
+
+                if (!email) {
+                    errors.email = "Email Tidak Boleh Kososng"
+                } else if (email.length < 6) {
+                    errors.email = "Email minimal 6 karakter"
+                } else {
+                    errors.email = ""
+                }
+
+                this.setState({ errors: errors})
+
+                let formValid = true;
+                for (let propName in errors) {
+                    if (errors[propName].length > 0) {
+                        formValid = false;
+                    }
+                }
+
+                if (formValid) {
+                    console.log(formValid)
+                    alert("Username dan Email sudah valid")
+                }
+            }
+
+            render() {
+                return (
+                    <div className="container">
+                        <form onSubmit={this.handleFormSubmit} noValidate>
+                            
+                            <div>
+                                <label htmlFor="username">Username</label>
+                                <input type="text" name="username" id="username"
+                                    value={this.state.username}
+                                    onChange={this.handleInputChange}/>
+                                    {this.state.errors.username && 
+                                        <smal>{this.state.errors.username}</smal>}    
+                            </div>
+
+                            <div>
+                                <label htmlFor="email">Email</label>
+                                <input type="text" name="email" id="email"
+                                    value={this.state.email}
+                                    onChange={this.handleInputChange}/>
+                                    {this.state.errors.email && 
+                                        <smal>{this.state.errors.email}</smal>}    
+                            </div>
+                            <input type="submit" style={{ marginTop: "10px"}} />
+                        </form> 
+                    </div>
+                )
+            }
+        }
+        ReactDOM.createRoot(document.getElementById('root')).render(<MyApp />);
+
+    </script>
+</body>
+</html>
