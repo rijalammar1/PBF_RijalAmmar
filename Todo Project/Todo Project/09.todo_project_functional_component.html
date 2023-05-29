@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React</title>
+  <style>
+    #root {
+      display: flex;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      margin-top: 2rem;
+      padding: 2rem 3rem;
+      box-shadow: 8px 8px 0px #007c9c;
+      border: 2px solid #19748c;
+    }
+
+    input[type="text"] {
+      width: 600px;
+      font-size: 1rem;
+      margin-top: 10px;
+      padding: 8px;
+      outline: 0;
+      border: 1px solid #007c9c;
+      border-radius: 3px 3px;
+    }
+
+    input[type="text"]:focus {
+      border-color: #007c9c;
+      box-shadow: 0 0 3px 4px rgb(0 124 156 / 16%);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #007c9c;
+    }
+
+    th {
+      background-color: #007c9c;
+      color: white;
+      text-align: center;
+    }
+
+    td label {
+      margin-right: 1rem;
+    }
+
+    td button {
+      background-color: #007c9c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    td button:hover {
+      background-color: #005b77;
+    }
+
+    small {
+      display: block;
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script src="js/react.development.js"></script>
+  <script src="js/react-dom.development.js"></script>
+  <script src="js/babel.js"></script>
+  <script type="text/babel">
+    const todos = [
+      { id: "01", text: "Baca buku React Uncover" },
+      { id: "02", text: "Makan siang" },
+      { id: "03", text: "Main game" }
+    ];
+
+    const Todo = (props) => {
+      const handleCompleteCheckboxChange = (e) => {
+        const completed = e.target.checked;
+        props.onTodoComplete(props.id, completed);
+        if (completed) {
+          setTimeout(() => {
+            props.onTodoClick(props.id);
+          }, 1000); // Delay 1 detik sebelum menghapus todo
+        }
+      }
+
+      const handleIncompleteCheckboxChange = (e) => {
+        const incomplete = e.target.checked;
+        props.onTodoIncomplete(props.id, incomplete);
+      }
+
+      const handleDeleteClick = () => {
+        props.onTodoClick(props.id);
+      }
+
+      return (
+        <tr>
+          <td>{props.text}</td>
+          <td>
+            <label>
+              <input
+                type="checkbox"
+                onChange={handleCompleteCheckboxChange}
+                checked={props.completed}
+              />
+              Complete
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={handleIncompleteCheckboxChange}
+                checked={!props.completed}
+              />
+              Incomplete
+            </label>
+            <button onClick={handleDeleteClick}>Delete</button>
+          </td>
+        </tr>
+      );
+    }
+
+    const TodoForm = (props) => {
+      const [inputTodo, setInputTodo] = React.useState("");
+      const [pesanErrors, setpesanErrors] = React.useState(null);
+
+      const handleInputChange = (e) => {
+        setInputTodo(e.target.value)
+      }
+
+      const handleFormSubmit = (e) => {
+        e.preventDefault();
+        if (inputTodo.trim() === "") {
+          setpesanErrors("Todo tidak boleh kosong");
+        } else {
+          props.onAddTodo(inputTodo);
+          setInputTodo("");
+        }
+      }
+
+      return (
+        <form onSubmit={handleFormSubmit}>
+          <div>
+            <input type="text" placeholder="Add todo..."
+              value={inputTodo}
+              onChange={handleInputChange}
+            />
+            {pesanErrors && <small>{pesanErrors}</small>}
+          </div>
+        </form>
+      )
+    }
+
+    const MyApp = () => {
+      const [arrayTodo, setArrayTodo] = React.useState(todos);
+
+      const handleDeleteClick = (id) => {
+        const newTodos = arrayTodo.filter(
+          item => item.id !== id
+        );
+        setArrayTodo(newTodos);
+      }
+
+      const handleCompleteChange = (id, completed) => {
+        const updatedTodos = arrayTodo.map(todo => {
+          if (todo.id === id) {
+            return { ...todo, completed: completed, incomplete: !completed };
+          }
+          return todo;
+        });
+        setArrayTodo(updatedTodos);
+      }
+
+      const handleIncompleteChange = (id, incomplete) => {
+        const updatedTodos = arrayTodo.map(todo => {
+          if (todo.id === id) {
+            return { ...todo, completed: !incomplete, incomplete: incomplete };
+          }
+          return todo;
+        });
+        setArrayTodo(updatedTodos);
+      }
+
+      const handleAddTodo = (text) => {
+        const newTodos = [
+          ...arrayTodo,
+          {
+            id: new Date().getTime().toString(),
+            text: text,
+            completed: false,
+            incomplete: true
+          }
+        ];
+        setArrayTodo(newTodos);
+      }
+
+      return (
+        <div className="container">
+          <table>
+            <thead>
+              <tr>
+                <th>Todo</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {arrayTodo.map((todo) => (
+                <Todo
+                  key={todo.id}
+                  id={todo.id}
+                  text={todo.text}
+                  completed={todo.completed}
+                  onTodoClick={handleDeleteClick}
+                  onTodoComplete={handleCompleteChange}
+                  onTodoIncomplete={handleIncompleteChange}
+                />
+              ))}
+            </tbody>
+          </table>
+          <TodoForm onAddTodo={handleAddTodo} />
+        </div>
+      )
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<MyApp />);
+  </script>
+</body>
+
+</html>
